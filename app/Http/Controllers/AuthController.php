@@ -32,7 +32,7 @@ class AuthController extends Controller
                 'token_type'    => 'Bearer',
             ]);
         } catch (\Exception $e) {
-            Log::error('Signup failed: ' . $e->getMessage()); // Log the actual error
+            Log::error('Signup failed: ' . $e->getMessage());
             return ApiResponse::error(message: 'Registration failed. Please try again later.');
         }
     }
@@ -93,7 +93,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
-            'user'          => $user,
+            // 'user'          => $user,
             'token'         => $token,
             'token_type'    => 'Bearer',
         ]);

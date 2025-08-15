@@ -5,26 +5,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth', 'prefix' => '/roles'], function () {
     // Get all roles
-    Route::get('/', [RoleController::class, 'index']);
+    Route::get('/',                         [RoleController::class, 'index']);
 
     // Get specific role
-    Route::get('/{role}', [RoleController::class, 'show']);
+    Route::get('/{role}',                   [RoleController::class, 'show']);
 
     // Create new role
-    Route::post('/', [RoleController::class, 'store']);
+    Route::post('/',                        [RoleController::class, 'store']);
 
     // Update role
-    Route::put('/{role}', [RoleController::class, 'update']);
+    Route::put('/{role}',                   [RoleController::class, 'update']);
 
     // Delete role
-    Route::delete('/{role}', [RoleController::class, 'destroy']);
+    Route::delete('/{role}',                [RoleController::class, 'destroy']);
 
     // Get role permissions
-    Route::get('/{role}/permissions', [RoleController::class, 'permissions']);
+    Route::get('/{role}/permissions',       [RoleController::class, 'permissions']);
 
     // Assign permissions to role
-    Route::post('/{role}/permissions', [RoleController::class, 'assignPermissions']);
+    Route::post('/{role}/permissions',      [RoleController::class, 'assignPermissions']);
 
     // Remove permissions from role
-    Route::delete('/{role}/permissions', [RoleController::class, 'removePermissions']);
+    Route::delete('/{role}/permissions',    [RoleController::class, 'removePermissions']);
 });

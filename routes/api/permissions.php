@@ -5,26 +5,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth', 'prefix' => '/permissions'], function () {
     // Get all permissions
-    Route::get('/', [PermissionController::class, 'index']);
+    Route::get('/',                 [PermissionController::class, 'index']);
 
     // Get specific permission
-    Route::get('/{permission}', [PermissionController::class, 'show']);
+    Route::get('/{permission}',     [PermissionController::class, 'show']);
 
     // Create new permission
-    Route::post('/', [PermissionController::class, 'store']);
+    Route::post('/',                [PermissionController::class, 'store']);
 
     // Update permission
-    Route::put('/{permission}', [PermissionController::class, 'update']);
+    Route::put('/{permission}',     [PermissionController::class, 'update']);
 
     // Delete permission
-    Route::delete('/{permission}', [PermissionController::class, 'destroy']);
+    Route::delete('/{permission}',  [PermissionController::class, 'destroy']);
 
     // Get permission hierarchy
-    Route::get('/hierarchy', [PermissionController::class, 'hierarchy']);
+    Route::get('/hierarchy',        [PermissionController::class, 'hierarchy']);
 
     // Get permissions by action
-    Route::get('/by-action', [PermissionController::class, 'byAction']);
+    Route::get('/by-action',        [PermissionController::class, 'byAction']);
 
     // Get permissions by subject
-    Route::get('/by-subject', [PermissionController::class, 'bySubject']);
+    Route::get('/by-subject',       [PermissionController::class, 'bySubject']);
 });
