@@ -10,37 +10,34 @@ use Illuminate\Http\Request;
 
 class AttachmentController extends Controller
 {
-    protected $attachmentService;
 
-    public function __construct(AttacementServiceInterface $attachmentService)
-    {
-        $this->attachmentService = $attachmentService;
+    public function __construct(
+        protected AttacementServiceInterface $attachmentService
+    ) {
+        // parent::__construct();
     }
 
     public function index()
     {
-        return ApiResponse::success('Attachments fetched successfully', Attachment::get());
+        return ApiResponse::success(message: 'Attachments fetched successfully', data: Attachment::get());
     }
 
     /**
-     * Upload a single file to a specific folder
+     * Upload a single file
+     *
+     * @param \App\Http\Requests\StoreAttachmentRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request)
+    public function upload(StoreAttachmentRequest $request)
     {
-        $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx,txt|max:10240',
-            'attach_to' => 'required|string|max:255'
-        ]);
+        $file       = $request->validated('file');
+        $attachTo   = $request->validated('attach_to');
 
         try {
-            $file = $request->file('file');
-            $attachTo = $request->input('attach_to');
-
             $result = $this->attachmentService->uploadFile($file, $attachTo);
-
-            return ApiResponse::success('File uploaded successfully', $result);
+            return ApiResponse::success(message: 'File uploaded successfully', data: $result);
         } catch (\Exception $e) {
-            return ApiResponse::error('Failed to upload file', $e->getMessage(), 500);
+            return ApiResponse::error(message: 'Failed to upload file', errors: $e->getMessage(), code: 500);
         }
     }
 

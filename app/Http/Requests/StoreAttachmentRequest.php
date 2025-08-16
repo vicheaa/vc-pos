@@ -22,7 +22,7 @@ class StoreAttachmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx,txt|max:10240', // 10MB max
+            'file'      => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx,txt|max:5120', // 10MB max
             'attach_to' => 'required|string|max:255'
         ];
     }
@@ -30,16 +30,16 @@ class StoreAttachmentRequest extends FormRequest
     /**
      * Get custom error messages for validator errors.
      */
-    public function messages(): array
-    {
-        return [
-            'file.required'         => 'Please select a file to upload.',
-            'file.file'             => 'The uploaded file is not valid.',
-            'file.mimes'            => 'File type not supported. Allowed types: jpeg, png, jpg, gif, pdf, doc, docx, xls, xlsx, txt.',
-            'file.max'              => 'The file must not exceed 10MB.',
-            'attach_to.required'    => 'The attach_to field is required.',
-            'attach_to.string'      => 'The attach_to field must be a string.',
-            'attach_to.max'         => 'The attach_to field must not exceed 255 characters.'
-        ];
-    }
+    // public function messages(): array
+    // {
+    //     return [
+    //         'file.required'         => 'Please select a file to upload.',
+    //         'file.file'             => 'The uploaded file is not valid.',
+    //         'file.mimes'            => 'File type not supported. Allowed types: jpeg, png, jpg, gif, pdf, doc, docx, xls, xlsx, txt.',
+    //         'file.max'              => 'The file must not exceed 128 kilobytes.',
+    //         'attach_to.required'    => 'The attach_to field is required.',
+    //         'attach_to.string'      => 'The attach_to field must be a string.',
+    //         'attach_to.max'         => 'The attach_to field must not exceed 255 characters.'
+    //     ];
+    // }
 }

@@ -146,7 +146,7 @@ class RoleController extends Controller
             return ApiResponse::success($permissions);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve role permissions: ' . $e->getMessage());
-            return ApiResponse::error('Failed to retrieve role permissions');
+            return ApiResponse::error('Failed to retrieve role permissions', $e->getMessage());
         }
     }
 
