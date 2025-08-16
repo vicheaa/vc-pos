@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Contracts\AttacementServiceInterface;
 use App\Contracts\CategoryServiceInterface;
+use App\Contracts\ProductServiceInterface;
 use App\Contracts\UomServiceInterface;
 use App\Services\AttachmentService;
 use App\Services\CategoryService;
+use App\Services\ProductService;
 use App\Services\UomService;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AttacementServiceInterface::class, AttachmentService::class);
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
         $this->app->bind(UomServiceInterface::class, UomService::class);
+        $this->app->bind(ProductServiceInterface::class, ProductService::class);
     }
 
     /**
