@@ -22,13 +22,13 @@ class ApiResponse
         ], $code);
     }
 
-    public static function paginated($paginator, $code = 200)
+    public static function paginated($paginator, $code = 200, $res = 'data')
     {
         return response()->json([
             'total'     => $paginator->total(),
             'next_page' => $paginator->nextPageUrl(),
             'prev_page' => $paginator->previousPageUrl(),
-            'data'      => $paginator->items(),
+            $res        => $paginator->items(),
         ], $code);
     }
 }

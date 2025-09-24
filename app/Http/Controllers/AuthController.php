@@ -133,7 +133,7 @@ class AuthController extends Controller
             $pageSize = $request->input('page_size', 15);
             $users = User::with('role')->paginate($pageSize);
 
-            return ApiResponse::paginated($users);
+            return ApiResponse::paginated($users, '200', 'users');
         } catch (AuthorizationException $e) {
             // Be specific with authorization failures (403 Forbidden)
             return ApiResponse::error(message: 'You are not authorized to perform this action.', code: 403);

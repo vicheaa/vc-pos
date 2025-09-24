@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('pricings', function (Blueprint $table) {
             $table->id();
+            $table->string('product_code');
+            $table->foreign('product_code')->references('code')->on('products')->onDelete('cascade');
+
+            $table->decimal('price', 10, 2);
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
+            $table->string('currency')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
