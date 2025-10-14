@@ -14,9 +14,22 @@ class ProductController extends Controller
         protected ProductServiceInterface $productService
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('uom', 'category')->paginate(20);
+        $query = Product::query();
+
+        $query->with('uom', 'category');
+
+        $query->when($request->input('search'), function ($q, $searchTerm) {
+            $q->where(function ($subQuery) use ($searchTerm) {
+                $subQuery->where('name', 'like', "%{$searchTerm}%")
+                    ->orWhere('name_kh', 'like', "%{$searchTerm}%")
+                    ->orWhere('code', 'like', "%{$searchTerm}%");
+            });
+        });
+
+        $products = $query->paginate(20)->appends($request->query());
+
         return ApiResponse::paginated($products);
     }
 

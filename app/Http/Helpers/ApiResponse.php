@@ -26,8 +26,8 @@ class ApiResponse
     {
         return response()->json([
             'total'     => $paginator->total(),
-            'next_page' => $paginator->nextPageUrl(),
-            'prev_page' => $paginator->previousPageUrl(),
+            'next' => $paginator->nextPageUrl(),
+            'previous' => $paginator->previousPageUrl(),
             $res        => $paginator->items(),
         ], $code);
     }
