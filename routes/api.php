@@ -10,3 +10,5 @@ require __DIR__ . '/api/product.php';
 require __DIR__ . '/api/customer.php';
 require __DIR__ . '/api/pricing.php';
 require __DIR__ . '/api/promotion.php';
+require __DIR__ . '/api/cart.php';
+require __DIR__ . '/api/order.php';

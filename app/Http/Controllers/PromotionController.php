@@ -7,7 +7,6 @@ use App\Http\Helpers\ApiResponse;
 use App\Http\Requests\StorePromotionRequest;
 use App\Http\Requests\UpdatePromotionRequest;
 use App\Models\Promotion;
-use Illuminate\Http\Request;
 
 class PromotionController extends Controller
 {
@@ -24,12 +23,13 @@ class PromotionController extends Controller
     public function store(StorePromotionRequest $request)
     {
         $promotion = $this->promotionService->createPromotion($request);
-        return ApiResponse::success(data: $promotion, message: 'Promotion created successfully');
+        return ApiResponse::success(data: $promotion, message: 'Promotion reated successfully');
     }
 
     public function show(Promotion $promotion)
     {
-        return ApiResponse::success(data: $promotion);
+        $promotion->load('products');
+        return response()->json($promotion);
     }
 
     public function update(UpdatePromotionRequest $request, Promotion $promotion)
