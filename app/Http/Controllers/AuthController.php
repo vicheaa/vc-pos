@@ -120,7 +120,9 @@ class AuthController extends Controller
     {
         // No try-catch needed here. The 'auth' middleware already ensures a user exists.
         // If something else fails, Laravel's global exception handler will catch it.
-        return ApiResponse::success($request->user());
+        $profile = $request->user();
+        $profile->load('role');
+        return ApiResponse::success($profile);
     }
 
     /**

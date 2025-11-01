@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->use([\App\Http\Middleware\CorsMiddleware::class]);
         $middleware->alias([
             'auth' => \App\Http\Middleware\ApiAuthentication::class,
             'api.error.handler' => \App\Http\Middleware\ApiErrorHandler::class,

@@ -12,7 +12,7 @@ class CartController extends Controller
 {
     /**
      * Checks multiple products and quantities against all valid promotions
-     * and returns the final calculated prices for each product.
+     * and returns the fin  al calculated prices for each product.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -86,6 +86,6 @@ class CartController extends Controller
         }
 
         // 7. Return the structured response
-        return ApiResponse::success($results);
+        return response()->json($results);
     }
 }
