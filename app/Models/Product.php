@@ -18,6 +18,9 @@ class Product extends Model
 
     public function category()
     {
+        // Tell Eloquent to match:
+        // this model's 'category_code' (foreign key)
+        // with the 'code' (owner key) on the Category model
         return $this->belongsTo(Category::class, 'category_code', 'code');
     }
 
@@ -37,5 +40,18 @@ class Product extends Model
             'code',               // The local key on the products table
             'id'                  // The local key on the promotions table
         );
+    }
+
+    public function scopeSearch($query, $searchTerm)
+    {
+        if (!$searchTerm) {
+            return $query;
+        }
+
+        return $query->where(function ($subQuery) use ($searchTerm) {
+            $subQuery->where('name', 'like', "%{$searchTerm}%")
+                ->orWhere('name_kh', 'like', "%{$searchTerm}%")
+                ->orWhere('code', 'like', "%{$searchTerm}%");
+        });
     }
 }

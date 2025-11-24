@@ -151,8 +151,8 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::all();
-        return ApiResponse::success($orders, 'Orders fetched successfully.');
+        $orders = Order::paginate(20);
+        return ApiResponse::paginated($orders, 200, 'orders');
     }
 
     public function show($id)

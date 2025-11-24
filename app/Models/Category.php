@@ -10,9 +10,9 @@ class Category extends Model
 {
     use HasFactory, HasApiTokens;
 
-    protected $primaryKey = 'code';
-
-    protected $guarded = [];
+    protected $primaryKey   = 'code';
+    protected $keyType      = 'string';
+    protected $guarded      = [];
 
     protected $hidden = ['created_at', 'updated_at'];
 

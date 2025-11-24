@@ -15,7 +15,9 @@ class UomController extends Controller
 
     public function index()
     {
-        return ApiResponse::success(message: 'UOM fetched successfully', data: Uom::all());
+        $uoms = Uom::all();
+        return response()->json($uoms);
+        // return ApiResponse::success(message: 'UOM fetched successfully', data: Uom::all());
     }
 
     public function store(StoreUomRequest $request)

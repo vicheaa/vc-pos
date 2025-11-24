@@ -17,7 +17,9 @@ class CategoryController extends Controller
     public function index()
     {
         // return ApiResponse::success(message: 'Categories fetched successfully', data: Category::get());
-        return ApiResponse::paginated(Category::paginate(10));
+        // return ApiResponse::paginated(Category::paginate(10));
+        $categories = Category::all();
+        return response()->json($categories);
     }
     public function store(StoreCategoryRequest $request)
     {
