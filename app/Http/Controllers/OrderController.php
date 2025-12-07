@@ -5,21 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Promotion;
-use App\Models\Stock;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Helpers\ApiResponse;
-use Illuminate\Support\Str;
 use App\Services\StockService;
+use App\Services\SequenceNumberService;
 class OrderController extends Controller
 {
     protected $stockService;
+    protected $sequenceNumberService;
 
-    public function __construct(StockService $stockService)
-    {
+    public function __construct(
+        StockService $stockService, 
+        SequenceNumberService $sequenceNumberService
+    ) {
         $this->stockService = $stockService;
+        $this->sequenceNumberService = $sequenceNumberService;
     }
+
+    // protected function generateInvoiceNumber()
+    // {
+    //     return $this->sequenceNumberService->generateNextNumber('invoice');
+    // }
+    
     /**
      * Store a newly created order in storage.
      *
@@ -64,7 +72,7 @@ class OrderController extends Controller
 
             // 4. Create the main Order record
             $order = Order::create([
-                'invoice_no'     => 'INV-' . time() . Str::random(4),
+                'invoice_no'     => $this->sequenceNumberService->generateNextNumber('invoice'),
                 'user_id'        => 1,
                 'customer_id'    => $validated['customer_id'] ?? null,
                 'subtotal'       => $subtotal,

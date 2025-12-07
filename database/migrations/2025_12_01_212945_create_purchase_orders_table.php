@@ -30,7 +30,6 @@ return new class extends Migration
             $table->string('supplier_name_kh')->nullable();
             $table->string('supplier_phone')->nullable();
             $table->string('supplier_phone_kh')->nullable();
-            $table->string('supplier_phone_kh')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'closed'])->default('pending');
             $table->decimal('total_amount', 10, 2)->default(0);
             $table->decimal('total_tax', 10, 2)->default(0);
@@ -59,8 +58,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('purchase_order_id')->nullable();
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders')->onDelete('set null');
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
+
+            $table->string('product_code')->nullable();
+            $table->foreign('product_code')->references('code')->on('products')->onDelete('set null');
+
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);

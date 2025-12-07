@@ -6,6 +6,8 @@ use App\Http\Helpers\ApiResponse;
 use App\Http\Requests\StorePurchaseOrderRequest;
 use App\Http\Requests\UpdatePurchaseOrderRequest;
 use App\Models\PurchaseOrder;
+use App\Services\StockService;
+use App\Services\SequenceNumberService;
 
 class PurchaseOrderController extends Controller
 {
@@ -19,10 +21,14 @@ class PurchaseOrderController extends Controller
     }
 
     protected $stockService;
+    protected $sequenceNumberService;
 
-    public function __construct(\App\Services\StockService $stockService)
-    {
+    public function __construct(
+        StockService $stockService,
+        SequenceNumberService $sequenceNumberService
+    ) {
         $this->stockService = $stockService;
+        $this->sequenceNumberService = $sequenceNumberService;
     }
 
     /**
@@ -48,7 +54,7 @@ class PurchaseOrderController extends Controller
 
                 // 2. Create Purchase Order
                 $po = PurchaseOrder::create([
-                    'po_no'             => 'PO-' . time(),
+                    'po_no'             => $this->sequenceNumberService->generateNextNumber('po'),
                     'supplier_name'     => $validated['supplier_name'] ?? '',
                     'supplier_phone'    => $validated['supplier_phone'] ?? '',
                     'po_date'           => $validated['po_date'] ?? now(),

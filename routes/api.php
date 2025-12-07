@@ -14,4 +14,5 @@ require __DIR__ . '/api/cart.php';
 require __DIR__ . '/api/order.php';
 require __DIR__ . '/api/stock.php';
 require __DIR__ . '/api/purchase_order.php';
+require __DIR__ . '/api/sequence_number.php';
 
