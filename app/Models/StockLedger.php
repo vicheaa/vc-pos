@@ -5,20 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseOrder extends Model
+class StockLedger extends Model
 {
-    /** @use HasFactory<\Database\Factories\PurchaseOrderFactory> */
     use HasFactory;
 
     protected $guarded = [];
 
     public function items()
     {
-        return $this->hasMany(PurchaseOrderItem::class);
+        return $this->hasMany(StockLedgerItem::class);
     }
-
+    
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
     }
 }

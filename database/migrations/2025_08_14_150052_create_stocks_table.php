@@ -23,20 +23,26 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('stock_ledger', function (Blueprint $table) {
+        Schema::create('stock_ledgers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('shop_id')->nullable()->constrained('shops')->onDelete('cascade');
-
-            $table->string('product_code');
-            $table->foreign('product_code')->references('code')->on('products')->onDelete('cascade');
-
-            $table->decimal('change', 10, 2); // The amount of change (+ or -)
-
-            $table->decimal('new_quantity', 10, 2); // The stock level after the change
-
             $table->string('type'); // e.g., 'SALE', 'PURCHASE', 'RETURN', 'ADJUSTMENT'
-            $table->timestamps();
+            $table->string('invoice_no')->nullable();
+            $table->string('po_no')->nullable();
+            $table->string('ref')->nullable();
+            $table->string('remarks')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamps();
+        });
+
+        Schema::create('stock_ledger_items', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('stock_ledger_id')->constrained('stock_ledgers')->onDelete('cascade');
+            $table->string('product_code', 50);
+            $table->foreign('product_code')->references('code')->on('products')->onDelete('cascade');
+            $table->decimal('change', 10, 2); // The amount of change (+ or -)
+            $table->decimal('new_quantity', 10, 2); // The stock level after the change
+            $table->timestamps();
         });
     }
 
@@ -45,7 +51,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock_ledger');
+        Schema::dropIfExists('stock_ledger_items');
+        Schema::dropIfExists('stock_ledgers');
         Schema::dropIfExists('stocks');
     }
 };

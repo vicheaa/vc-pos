@@ -54,4 +54,9 @@ class Product extends Model
                 ->orWhere('code', 'like', "%{$searchTerm}%");
         });
     }
+
+    public function stock()
+    {
+        return $this->hasOne(Stock::class, 'product_code', 'code');
+    }
 }

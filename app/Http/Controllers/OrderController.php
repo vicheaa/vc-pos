@@ -7,13 +7,19 @@ use App\Models\Product;
 use App\Models\Promotion;
 use App\Models\Stock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Helpers\ApiResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use App\Services\StockService;
 class OrderController extends Controller
 {
+    protected $stockService;
+
+    public function __construct(StockService $stockService)
+    {
+        $this->stockService = $stockService;
+    }
     /**
      * Store a newly created order in storage.
      *
@@ -24,12 +30,11 @@ class OrderController extends Controller
     {
         // 1. Validate the incoming request data
         $validated = $request->validate([
-            'customer_id'       => 'nullable|exists:customers,id',
-            'items'             => 'required|array|min:1',
-            'items.*.product_code' => 'required|exists:products,code',
-            'items.*.quantity'  => 'required|numeric|min:0.01',
-            'items.*.promotion_id' => 'nullable|exists:promotions,id',
-            // You can add more validation for price, discount etc.
+            'customer_id'           => 'nullable|exists:customers,id',
+            'items'                 => 'required|array|min:1',
+            'items.*.product_code'  => 'required|exists:products,code',
+            'items.*.quantity'      => 'required|numeric|min:1',
+            'items.*.promotion_id'  => 'nullable|exists:promotions,id',
         ]);
 
         // 2. Wrap the entire operation in a database transaction
@@ -69,6 +74,8 @@ class OrderController extends Controller
             ]);
 
             // 5. Create Order Items and update stock
+            // 5. Create Order Items and prepare stock data
+            $stockItems = [];
             foreach ($validated['items'] as $itemData) {
                 $product = Product::find($itemData['product_code']);
                 $priceDetails = $this->calculateItemPrice($product, $itemData['quantity'], $itemData['promotion_id'] ?? null);
@@ -82,28 +89,31 @@ class OrderController extends Controller
                     'line_total'      => $priceDetails['final_amount'],
                 ]);
 
-                // Update the stock record
-                // $stock = Stock::where('product_code', $product->code)->first();
-                // $newQuantity = $stock->quantity - $itemData['quantity'];
-                // $stock->update(['quantity' => $newQuantity]);
-
-                // Create a record in the stock ledger
-                // StockLedger::create([
-                //     'product_code' => $product->code,
-                //     'user_id'      => auth()->id(),
-                //     'change'       => -$itemData['quantity'],
-                //     'new_quantity' => $newQuantity,
-                //     'type'         => 'SALE',
-                //     'notes'        => 'Order ID: ' . $order->id,
-                // ]);
+                // Collect stock item data
+                $stockItems[] = [
+                    'product_code' => $product->code,
+                    'quantity'     => $itemData['quantity']
+                ];
             }
 
-            // 6. If everything is successful, commit the transaction
+            // 6. Record stock movement (Batch)
+            $user = $request->user();
+            $this->stockService->createTransaction(
+                [
+                    'shop_id'    => $order->shop_id,
+                    'type'       => 'SALE',
+                    'created_by' => $user->id ?? null,
+                    'invoice_no' => $order->invoice_no
+                ],
+                $stockItems
+            );
+
+            // 7. If everything is successful, commit the transaction
             DB::commit();
 
             return ApiResponse::success($order->load('orderItems'), 'Order created successfully.');
         } catch (\Exception $e) {
-            // 7. If anything fails, roll back the transaction
+            // 8. If anything fails, roll back the transaction
             DB::rollBack();
             return ApiResponse::error('Failed to create order: ' . $e->getMessage(), 500);
         }

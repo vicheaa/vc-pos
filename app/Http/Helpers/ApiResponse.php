@@ -4,12 +4,12 @@ namespace App\Http\Helpers;
 
 class ApiResponse
 {
-    public static function success($data = null, $message = 'Success', $code = 200)
+    public static function success($data = null, $message = 'Success', $code = 200, $res = 'data')
     {
         return response()->json([
             'success'   => true,
             'message'   => $message,
-            'data'      => $data,
+            $res        => $data,
         ], $code);
     }
 
@@ -26,8 +26,8 @@ class ApiResponse
     {
         return response()->json([
             'total'     => $paginator->total(),
-            'next' => $paginator->nextPageUrl(),
-            'previous' => $paginator->previousPageUrl(),
+            'next'      => $paginator->nextPageUrl(),
+            'previous'  => $paginator->previousPageUrl(),
             $res        => $paginator->items(),
         ], $code);
     }
