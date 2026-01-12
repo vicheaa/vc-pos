@@ -106,9 +106,10 @@ class OrderController extends Controller
 
             // 6. Record stock movement (Batch)
             $user = $request->user();
+            // dd('======= ', $stockItems);
             $this->stockService->createTransaction(
                 [
-                    'shop_id'    => $order->shop_id,
+                    'shop_id'    => 1, // TODO: Get from request or user's assigned shop
                     'type'       => 'SALE',
                     'created_by' => $user->id ?? null,
                     'invoice_no' => $order->invoice_no
@@ -169,7 +170,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::paginate(20);
+        $orders = Order::orderBy('id', 'desc')->paginate(20);
         return ApiResponse::paginated($orders, 200, 'orders');
     }
 

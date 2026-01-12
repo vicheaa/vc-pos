@@ -51,7 +51,7 @@ class StockService
         return DB::transaction(function () use ($headerData, $itemsData) {
             // 1. Create Header
             $ledger = \App\Models\StockLedger::create([
-                'shop_id'    => $headerData['shop_id'] ?? null,
+                'shop_id'    => $headerData['shop_id'] ?? 1,
                 'type'       => $headerData['type'],
                 'invoice_no' => $headerData['invoice_no'] ?? null,
                 'po_no'      => $headerData['po_no'] ?? null,
@@ -88,7 +88,7 @@ class StockService
                 $newQuantity = $stock->quantity + $change;
 
                 if ($newQuantity < 0) {
-                     // Potential negative stock check
+                    throw new Exception("Insufficient stock for product: {$productCode}. Available: {$stock->quantity}, Requested: {$cleanQuantity}");
                 }
 
                 $stock->update(['quantity' => $newQuantity]);
