@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             MovementTypeSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }
